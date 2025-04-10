@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: pokemonapi
+
+server:
+  port: 8080
+
+pokeapi.host: https://pokeapi.co/api/v2/pokemon/
