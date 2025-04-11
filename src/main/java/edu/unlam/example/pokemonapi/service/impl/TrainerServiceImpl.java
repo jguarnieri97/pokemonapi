@@ -87,6 +87,13 @@ public class TrainerServiceImpl implements TrainerService {
         return Converter.convertToResponse(trainer);
     }
 
+    /**
+     * A conciderar: estos métodos pueden abstraerse y deben ser parte de una capa más relacionada al repositorio
+     * que contempla todas las operaciones del mismo.
+     *
+     * @param id id del entrenador
+     * @return entidad del entrenador
+     */
     private TrainerEntity getTrainerById(Long id) {
         log.info("Consultando entrenador con el id: {}", id );
 
