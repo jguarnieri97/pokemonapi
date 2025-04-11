@@ -1,5 +1,6 @@
 package edu.unlam.example.pokemonapi.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public class PokemonEntity {
     private int order;
 
     @ManyToMany(mappedBy = "pokemons")
+    @JsonIgnore
     private List<TrainerEntity> trainers;
 
     public PokemonEntity(int id, String name, int order) {
