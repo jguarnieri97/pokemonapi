@@ -1,6 +1,7 @@
 package edu.unlam.example.pokemonapi.utils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.unlam.example.pokemonapi.domain.PokemonEntity;
 import edu.unlam.example.pokemonapi.domain.TrainerEntity;
@@ -25,6 +26,13 @@ public class Converter {
     private static List<PokemonResponse> convertToPokemonResponse(Set<PokemonEntity> pokemonEntityList) {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.convertValue(pokemonEntityList, new TypeReference<>() {
+        });
+    }
+
+    public static List<TrainerResponse> convertToResponseList(List<TrainerEntity> trainerEntityList) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        return mapper.convertValue(trainerEntityList, new TypeReference<>() {
         });
     }
 

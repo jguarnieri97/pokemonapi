@@ -3,6 +3,7 @@ package edu.unlam.example.pokemonapi.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -28,8 +29,13 @@ public class TrainerEntity {
     )
     private Set<PokemonEntity> pokemons;
 
+    @Setter
+    @Column(name = "is_active")
+    private boolean isActive;
+
     public TrainerEntity(String name) {
         this.name = name;
+        this.isActive = true;
         this.pokemons = new HashSet<>();
     }
 
