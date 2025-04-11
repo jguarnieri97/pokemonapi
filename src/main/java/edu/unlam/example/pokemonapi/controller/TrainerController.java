@@ -41,4 +41,9 @@ public class TrainerController {
         trainerService.deleteTrainer(id);
     }
 
+    @PutMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public TrainerResponse addPokemon(@PathVariable Long id,@Valid @RequestBody TrainerRequest request) {
+        return trainerService.addPokemon(id, request);
+    }
 }

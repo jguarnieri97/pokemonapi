@@ -1,17 +1,16 @@
 package edu.unlam.example.pokemonapi.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "POKEMON")
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @EqualsAndHashCode
 public class PokemonEntity {
@@ -27,6 +26,13 @@ public class PokemonEntity {
 
     @ManyToMany(mappedBy = "pokemons")
     private List<TrainerEntity> trainers;
+
+    public PokemonEntity(int id, String name, int order) {
+        this.id = id;
+        this.name = name;
+        this.order = order;
+        this.trainers = new ArrayList<>();
+    }
 
     public void addTrainer(TrainerEntity trainer) {
         trainers.add(trainer);

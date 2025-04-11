@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class PokemonResponse {
 
-    private Long id;
+    private int id;
     private String name;
     private Integer order;
 
