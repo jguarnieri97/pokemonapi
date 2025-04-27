@@ -1,6 +1,6 @@
-package edu.unlam.example.pokemonapi.repository;
+package edu.unlam.example.pokemonapi.persistence.repository;
 
-import edu.unlam.example.pokemonapi.domain.TrainerEntity;
+import edu.unlam.example.pokemonapi.model.TrainerEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

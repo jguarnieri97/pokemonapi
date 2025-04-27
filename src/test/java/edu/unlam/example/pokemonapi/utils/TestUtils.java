@@ -1,7 +1,7 @@
 package edu.unlam.example.pokemonapi.utils;
 
-import edu.unlam.example.pokemonapi.domain.PokemonEntity;
-import edu.unlam.example.pokemonapi.domain.TrainerEntity;
+import edu.unlam.example.pokemonapi.model.PokemonEntity;
+import edu.unlam.example.pokemonapi.model.TrainerEntity;
 import edu.unlam.example.pokemonapi.dto.PokemonResponse;
 import lombok.experimental.UtilityClass;
 

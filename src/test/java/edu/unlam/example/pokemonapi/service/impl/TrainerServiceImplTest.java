@@ -1,10 +1,11 @@
 package edu.unlam.example.pokemonapi.service.impl;
 
-import edu.unlam.example.pokemonapi.domain.TrainerEntity;
+import edu.unlam.example.pokemonapi.model.TrainerEntity;
 import edu.unlam.example.pokemonapi.dto.TrainerRequest;
 import edu.unlam.example.pokemonapi.exceptions.TrainerDatabaseException;
 import edu.unlam.example.pokemonapi.exceptions.TrainerNotFoundException;
-import edu.unlam.example.pokemonapi.repository.TrainerRepository;
+import edu.unlam.example.pokemonapi.persistence.PokemonDAO;
+import edu.unlam.example.pokemonapi.persistence.TrainerDAO;
 import edu.unlam.example.pokemonapi.service.PokemonService;
 import edu.unlam.example.pokemonapi.service.TrainerService;
 import edu.unlam.example.pokemonapi.utils.TestUtils;
@@ -14,15 +15,15 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.MockitoAnnotations;
 
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class TrainerServiceImplTest {
 
-    private TrainerRepository trainerRepository;
+    private TrainerDAO trainerRepository;
+
+    private PokemonDAO pokemonRepository;
 
     private PokemonService pokemonService;
 
@@ -38,16 +39,17 @@ class TrainerServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        trainerRepository = mock(TrainerRepository.class);
+        trainerRepository = mock(TrainerDAO.class);
+        pokemonRepository = mock(PokemonDAO.class);
         pokemonService = mock(PokemonService.class);
-        trainerService = new TrainerServiceImpl(trainerRepository, pokemonService);
+        trainerService = new TrainerServiceImpl(trainerRepository, pokemonRepository, pokemonService);
     }
 
     @Test
     void shouldCreateTrainer() {
         var trainer = trainerService.createTrainer(TRAINER_NAME);
 
-        verify(trainerRepository).save(any());
+        verify(trainerRepository).saveTrainer(any());
         assertEquals(TRAINER_NAME, trainer.getName());
         assertEquals(0, trainer.getPokemons().size());
     }
@@ -56,7 +58,7 @@ class TrainerServiceImplTest {
     void shouldGetTrainerById() {
         var trainer = TestUtils.createTrainerEntity(TRAINER_NAME);
 
-        when(trainerRepository.findById(ID)).thenReturn(Optional.of(trainer));
+        when(trainerRepository.getTrainerById(ID)).thenReturn(trainer);
 
         var response = trainerService.getTrainer(ID);
 
@@ -64,20 +66,14 @@ class TrainerServiceImplTest {
         assertEquals(trainer.getId(), response.getId());
     }
 
-    @Test
-    void whenGetTrainer_ifNotExist_thenThrowException() {
 
-        when(trainerRepository.findById(ID)).thenReturn(Optional.empty());
-
-        assertThrows(TrainerNotFoundException.class, () -> trainerService.getTrainer(ID));
-    }
 
     @Test
     void shouldDeleteTrainer() {
         var trainer = TestUtils.createTrainerEntity(TRAINER_NAME);
 
-        when(trainerRepository.findById(ID)).thenReturn(Optional.of(trainer));
-        when(trainerRepository.save(captor.capture())).thenReturn(trainer);
+        when(trainerRepository.getTrainerById(ID)).thenReturn(trainer);
+        doNothing().when(trainerRepository).saveTrainer(captor.capture());
 
         trainerService.deleteTrainer(ID);
 
@@ -90,8 +86,8 @@ class TrainerServiceImplTest {
     void whenDeleteTrainer_ifDatabaseException_thenThrowException() {
         var trainer = TestUtils.createTrainerEntity(TRAINER_NAME);
 
-        when(trainerRepository.findById(ID)).thenReturn(Optional.of(trainer));
-        when(trainerRepository.save(any())).thenThrow(RuntimeException.class);
+        when(trainerRepository.getTrainerById(ID)).thenReturn(trainer);
+        doThrow(TrainerDatabaseException.class).when(trainerRepository).saveTrainer(any());
 
         assertThrows(TrainerDatabaseException.class, () -> trainerService.deleteTrainer(ID));
     }
@@ -102,7 +98,7 @@ class TrainerServiceImplTest {
         var pokemon = TestUtils.createPokemonResponse(POKEMON_NAME);
 
         when(pokemonService.getPokemon(POKEMON_NAME)).thenReturn(pokemon);
-        when(trainerRepository.findById(ID)).thenReturn(Optional.of(trainer));
+        when(trainerRepository.getTrainerById(ID)).thenReturn(trainer);
 
         var response = trainerService.addPokemon(ID, TrainerRequest.builder().name(POKEMON_NAME).build());
         var pokemonResponse = response.getPokemons().get(0);

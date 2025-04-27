@@ -1,8 +1,7 @@
-package edu.unlam.example.pokemonapi.domain;
+package edu.unlam.example.pokemonapi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

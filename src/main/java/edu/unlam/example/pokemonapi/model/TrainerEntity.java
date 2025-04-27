@@ -1,4 +1,4 @@
-package edu.unlam.example.pokemonapi.domain;
+package edu.unlam.example.pokemonapi.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
